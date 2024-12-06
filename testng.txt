@@ -1,0 +1,52 @@
+AmazonScraper.java
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+public class AmazonScraper {
+    WebDriver driver;
+
+    @BeforeClass
+    public void setUp() {
+        System.setProperty("webdriver.chrome.driver", "C:/College work/sem 7/chromedriver-win64/chromedriver-win64/chromedriver.exe");
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("https://www.amazon.in");
+    }
+
+    @Test
+    public void searchForProduct() {
+        WebElement searchBox = driver.findElement(By.id("twotabsearchtextbox"));
+        searchBox.sendKeys("iPhone 15");
+
+        WebElement searchButton = driver.findElement(By.id("nav-search-submit-button"));
+        searchButton.click();
+
+        WebElement firstResultPrice = driver.findElement(By.xpath(
+            "(//span[contains(@class, 'a-price-whole')])[1]"));
+        System.out.println("Price of first result: " + firstResultPrice.getText());
+    }
+
+    @AfterClass
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+}
+
+
+Testng.xml
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="AmazonSearchSuite">
+    <test name="AmazonScraper">
+        <classes>
+            <class name="AmazonScraper"/>
+        </classes>
+    </test>
+</suite>
